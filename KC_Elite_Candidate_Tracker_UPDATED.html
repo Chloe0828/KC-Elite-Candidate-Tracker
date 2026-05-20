@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>KC Elite Staffing — Candidate Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --navy: #0f1f38;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --cream: #faf7f2;
+    --white: #ffffff;
+    --gray-100: #f4f1ec;
+    --gray-200: #e8e3da;
+    --gray-400: #9e9587;
+    --gray-600: #5c5649;
+    --green: #2d7a5f;
+    --green-bg: #e8f4ef;
+    --blue: #1a4f8a;
+    --blue-bg: #e8f0f9;
+    --orange: #c4622d;
+    --orange-bg: #faeee7;
+    --purple: #5b3fa6;
+    --purple-bg: #eeebf7;
+    --red: #b83232;
+    --red-bg: #faeaea;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--navy);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--navy);
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid var(--gold);
+  }
+  .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    color: var(--white);
+    letter-spacing: 0.02em;
+  }
+  .logo span { color: var(--gold); }
+  .header-sub { font-size: 0.75rem; color: var(--gray-400); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px; }
+  .header-right { display: flex; gap: 12px; align-items: center; }
+  .stat-pill {
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold-light);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  /* TOOLBAR */
+  .toolbar {
+    background: var(--white);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--gray-200);
+    flex-wrap: wrap;
+  }
+  .search-wrap { position: relative; flex: 1; min-width: 220px; }
+  .search-wrap input {
+    width: 100%;
+    padding: 9px 14px 9px 36px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.87rem;
+    background: var(--gray-100);
+    color: var(--navy);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-wrap input:focus { border-color: var(--gold); background: var(--white); }
+  .search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--gray-400); font-size: 0.9rem; }
+  select {
+    padding: 9px 12px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.87rem;
+    background: var(--gray-100);
+    color: var(--navy);
+    outline: none;
+    cursor: pointer;
+  }
+  select:focus { border-color: var(--gold); }
+  .btn {
+    padding: 9px 18px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.87rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+  .btn-primary { background: var(--navy); color: var(--white); }
+  .btn-primary:hover { background: var(--gold); color: var(--navy); }
+  .btn-gold { background: var(--gold); color: var(--navy); }
+  .btn-gold:hover { background: var(--gold-light); }
+  .btn-sm { padding: 5px 12px; font-size: 0.78rem; }
+  .btn-outline { background: transparent; border: 1.5px solid var(--gray-200); color: var(--gray-600); }
+  .btn-outline:hover { border-color: var(--navy); color: var(--navy); }
+
+  /* TABLE */
+  .table-wrap { padding: 24px 32px; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(15,31,56,0.07); }
+  thead { background: var(--navy); }
+  thead th {
+    padding: 13px 16px;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--gold-light);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  tbody tr { border-bottom: 1px solid var(--gray-100); transition: background 0.15s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--gray-100); }
+  td { padding: 13px 16px; font-size: 0.87rem; vertical-align: middle; }
+  .candidate-name { font-weight: 600; color: var(--navy); }
+  .candidate-title { font-size: 0.78rem; color: var(--gray-400); margin-top: 2px; }
+
+  /* STATUS BADGES */
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+  .badge-available { background: var(--green-bg); color: var(--green); }
+  .badge-placed { background: var(--blue-bg); color: var(--blue); }
+  .badge-interviewing { background: var(--purple-bg); color: var(--purple); }
+  .badge-submitted { background: var(--orange-bg); color: var(--orange); }
+  .badge-inactive { background: var(--gray-100); color: var(--gray-400); }
+  .badge-dnu { background: var(--red-bg); color: var(--red); }
+
+  /* TAGS */
+  .tags { display: flex; flex-wrap: wrap; gap: 4px; }
+  .tag {
+    background: var(--navy);
+    color: var(--gold-light);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 500;
+  }
+
+  /* RESUME CELL */
+  .resume-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1.5px solid var(--gray-200);
+    background: var(--white);
+    color: var(--navy);
+    transition: all 0.15s;
+  }
+  .resume-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .resume-btn.has-resume { border-color: var(--green); color: var(--green); background: var(--green-bg); }
+  .resume-upload-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1.5px dashed var(--gray-200);
+    background: var(--white);
+    color: var(--gray-400);
+    transition: all 0.15s;
+  }
+  .resume-upload-label:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ACTIONS */
+  .actions { display: flex; gap: 6px; }
+
+  /* MODAL OVERLAY */
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15,31,56,0.6);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(3px);
+  }
+  .overlay.active { display: flex; }
+
+  /* ADD/EDIT MODAL */
+  .modal {
+    background: var(--white);
+    border-radius: 16px;
+    width: 620px;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(15,31,56,0.25);
+    animation: slideUp 0.25s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal-header {
+    padding: 24px 28px 16px;
+    border-bottom: 1px solid var(--gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .modal-title { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--navy); }
+  .modal-close { background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--gray-400); padding: 4px; border-radius: 6px; }
+  .modal-close:hover { background: var(--gray-100); color: var(--navy); }
+  .modal-body { padding: 24px 28px; }
+  .modal-footer { padding: 16px 28px 24px; display: flex; gap: 10px; justify-content: flex-end; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.87rem;
+    color: var(--navy);
+    outline: none;
+    transition: border-color 0.2s;
+    background: var(--gray-100);
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold); background: var(--white); }
+  .form-group textarea { resize: vertical; min-height: 70px; }
+
+  /* RESUME UPLOAD IN MODAL */
+  .resume-drop-zone {
+    border: 2px dashed var(--gray-200);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--gray-100);
+  }
+  .resume-drop-zone:hover, .resume-drop-zone.dragover { border-color: var(--gold); background: #fdf9f0; }
+  .resume-drop-zone .dz-icon { font-size: 2rem; margin-bottom: 8px; }
+  .resume-drop-zone .dz-text { font-size: 0.85rem; color: var(--gray-600); }
+  .resume-drop-zone .dz-sub { font-size: 0.75rem; color: var(--gray-400); margin-top: 4px; }
+  .resume-loaded { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--green-bg); border-radius: 8px; border: 1.5px solid var(--green); }
+  .resume-loaded .rl-name { font-size: 0.85rem; font-weight: 600; color: var(--green); flex: 1; }
+  .resume-loaded .rl-remove { background: none; border: none; color: var(--red); cursor: pointer; font-size: 1rem; padding: 2px 6px; border-radius: 4px; }
+  .resume-loaded .rl-remove:hover { background: var(--red-bg); }
+
+  /* RESUME PREVIEW MODAL */
+  .preview-modal {
+    background: var(--white);
+    border-radius: 16px;
+    width: 780px;
+    max-width: 95vw;
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(15,31,56,0.25);
+    animation: slideUp 0.25s ease;
+  }
+  .preview-header {
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .preview-name { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: var(--navy); }
+  .preview-sub { font-size: 0.78rem; color: var(--gray-400); margin-top: 2px; }
+  .preview-actions { display: flex; gap: 8px; align-items: center; }
+  .preview-body { flex: 1; overflow: hidden; }
+  .preview-body iframe { width: 100%; height: 100%; border: none; border-radius: 0 0 16px 16px; }
+  .preview-body .text-preview { padding: 24px; overflow-y: auto; height: 100%; font-size: 0.87rem; line-height: 1.7; color: var(--navy); white-space: pre-wrap; font-family: 'DM Sans', sans-serif; }
+  .no-preview { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--gray-400); gap: 12px; }
+  .no-preview .np-icon { font-size: 3rem; }
+
+  /* EMPTY STATE */
+  .empty-state { padding: 60px 32px; text-align: center; color: var(--gray-400); }
+  .empty-state .es-icon { font-size: 3rem; margin-bottom: 12px; }
+  .empty-state .es-title { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--navy); margin-bottom: 8px; }
+  .empty-state .es-sub { font-size: 0.87rem; margin-bottom: 20px; }
+
+  /* TAGS INPUT */
+  .tags-input-wrap { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px; border: 1.5px solid var(--gray-200); border-radius: 8px; background: var(--gray-100); min-height: 42px; cursor: text; }
+  .tags-input-wrap:focus-within { border-color: var(--gold); background: var(--white); }
+  .tag-item { background: var(--navy); color: var(--gold-light); padding: 3px 8px 3px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 500; display: flex; align-items: center; gap: 5px; }
+  .tag-item button { background: none; border: none; color: var(--gold-light); cursor: pointer; font-size: 0.8rem; padding: 0; line-height: 1; opacity: 0.7; }
+  .tag-item button:hover { opacity: 1; }
+  .tags-input-field { border: none; outline: none; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; background: transparent; color: var(--navy); flex: 1; min-width: 80px; }
+
+  /* COUNT BADGE */
+  .count { background: var(--gold); color: var(--navy); border-radius: 20px; padding: 1px 8px; font-size: 0.72rem; font-weight: 700; margin-left: 6px; }
+
+  /* DIVIDER */
+  .section-label { font-size: 0.72rem; font-weight: 700; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--gray-200); }
+
+  /* NOTES CELL */
+  .notes-cell { max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.8rem; color: var(--gray-400); }
+
+  /* RESPONSIVE */
+  @media (max-width: 700px) {
+    .toolbar { padding: 12px 16px; }
+    .table-wrap { padding: 12px 8px; }
+    header { padding: 14px 16px; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">KC <span>Elite</span> Staffing</div>
+    <div class="header-sub">Candidate Tracker</div>
+  </div>
+  <div class="header-right">
+    <div class="stat-pill">🟢 <span id="availableCount">0</span> Active</div>
+    <div class="stat-pill">👥 <span id="totalCount">0</span> Total</div>
+  </div>
+</header>
+
+<!-- Loading bar -->
+<div id="loadingBar" style="display:none;position:fixed;top:0;left:0;right:0;z-index:999;background:var(--navy);color:var(--gold-light);padding:10px 20px;font-size:0.85rem;font-weight:600;align-items:center;gap:10px;justify-content:center;">
+  <span style="animation:spin 1s linear infinite;display:inline-block;">⟳</span>
+  <span id="loadingMsg">Loading…</span>
+</div>
+
+<!-- Toast -->
+<div id="toast" style="display:none;position:fixed;bottom:28px;right:28px;z-index:999;color:white;padding:12px 22px;border-radius:10px;font-size:0.87rem;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,0.2);transition:opacity 0.4s;"></div>
+
+<style>
+@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+</style>
+
+<div class="toolbar">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Search by name, title, skill, or location…" oninput="renderTable()"/>
+  </div>
+  <select id="statusFilter" onchange="renderTable()">
+    <option value="">All Statuses</option>
+    <option value="Active">Active</option>
+    <option value="Submitted">Submitted</option>
+    <option value="Interviewing">Interviewing</option>
+    <option value="Placed">Placed</option>
+    <option value="Inactive">Inactive</option>
+    <option value="DNU">Do Not Use</option>
+  </select>
+  <select id="industryFilter" onchange="renderTable()">
+    <option value="">All Industries</option>
+    <option>Light Industrial</option>
+    <option>Warehouse</option>
+    <option>Administrative/Office</option>
+    <option>Healthcare/Medical</option>
+    <option>Logistics & Distribution</option>
+    <option>IT/Tech</option>
+    <option>Finance</option>
+    <option>Executive</option>
+    <option>Other</option>
+  </select>
+  <button class="btn btn-gold" onclick="openAddModal()">+ Add Candidate</button>
+</div>
+
+<div class="table-wrap">
+  <table id="candidateTable">
+    <thead>
+      <tr>
+        <th>Candidate</th>
+        <th>Status</th>
+        <th>Readiness</th>
+        <th>Industry</th>
+        <th>Target Title(s)</th>
+        <th>Placement Type</th>
+        <th>Location</th>
+        <th>Availability</th>
+        <th>Shift</th>
+        <th>Comp Target</th>
+        <th>Split?</th>
+        <th>Last Touch</th>
+        <th>Drive</th>
+        <th>Skills / Tags</th>
+        <th>Notes</th>
+        <th>Resume</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+  <div id="emptyState" class="empty-state" style="display:none;">
+    <div class="es-icon">📋</div>
+    <div class="es-title">No candidates yet</div>
+    <div class="es-sub">Add your first candidate to start building your talent database.</div>
+    <button class="btn btn-gold" onclick="openAddModal()">+ Add First Candidate</button>
+  </div>
+</div>
+
+<!-- ADD / EDIT MODAL -->
+<div class="overlay" id="addOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Add Candidate</div>
+      <button class="modal-close" onclick="closeAddModal()">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <div class="section-label">Basic Info</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name *</label>
+          <input type="text" id="f_firstName" placeholder="Jane"/>
+        </div>
+        <div class="form-group">
+          <label>Last Name *</label>
+          <input type="text" id="f_lastName" placeholder="Smith"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="f_email" placeholder="jane@email.com"/>
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="tel" id="f_phone" placeholder="(555) 000-0000"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Location</label>
+          <input type="text" id="f_location" placeholder="City, State"/>
+        </div>
+        <div class="form-group">
+          <label>LinkedIn URL</label>
+          <input type="url" id="f_linkedin" placeholder="https://linkedin.com/in/…"/>
+        </div>
+      </div>
+
+      <div class="section-label" style="margin-top:4px;">Placement Details</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Industry</label>
+          <select id="f_industry" onchange="toggleOtherIndustry(this.value)">
+            <option value="">— Select —</option>
+            <option>Light Industrial</option>
+            <option>Warehouse</option>
+            <option>Administrative/Office</option>
+            <option>Healthcare/Medical</option>
+            <option>Logistics & Distribution</option>
+            <option>IT/Tech</option>
+            <option>Finance</option>
+            <option>Executive</option>
+            <option>Other</option>
+          </select>
+          <input type="text" id="f_industryOther" placeholder="Please specify industry…" style="display:none;margin-top:8px;"/>
+        </div>
+        <div class="form-group">
+          <label>Target Title(s)</label>
+          <input type="text" id="f_targetTitles" placeholder="e.g. Warehouse Lead, Forklift Op"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Placement Type</label>
+          <select id="f_placementType">
+            <option value="">— Select —</option>
+            <option>Temp-to-Hire</option>
+            <option>Direct Hire</option>
+            <option>Temp</option>
+            <option>Contract</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="f_status">
+            <option value="Active">Active</option>
+            <option value="Submitted">Submitted</option>
+            <option value="Interviewing">Interviewing</option>
+            <option value="Placed">Placed</option>
+            <option value="Inactive">Inactive</option>
+            <option value="DNU">Do Not Use</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Availability</label>
+          <select id="f_availability">
+            <option value="">— Select —</option>
+            <option>Immediate</option>
+            <option>2 Weeks</option>
+            <option>30 Days</option>
+            <option>Flexible</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Shift Preference</label>
+          <select id="f_shift">
+            <option value="">— Select —</option>
+            <option>1st (Day)</option>
+            <option>2nd (Evening)</option>
+            <option>3rd (Night)</option>
+            <option>1st & 2nd</option>
+            <option>2nd & 3rd</option>
+            <option>1st & 3rd</option>
+            <option>Any</option>
+            <option>Flexible</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Comp Target</label>
+          <input type="text" id="f_pay" placeholder="e.g. $18+/hr or $45k"/>
+        </div>
+        <div class="form-group">
+          <label>Split Partner?</label>
+          <select id="f_splitPartner">
+            <option value="No">No</option>
+            <option value="Yes">Yes</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Last Touch Date</label>
+          <input type="date" id="f_lastTouch"/>
+        </div>
+        <div class="form-group">
+          <label>Resume in Drive?</label>
+          <select id="f_resumeInDrive">
+            <option value="No">No</option>
+            <option value="Yes">Yes</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Google Drive Folder Link</label>
+          <input type="url" id="f_driveLink" placeholder="Paste Drive folder link here…" style="flex:1 1 100%;"/>
+        </div>
+      </div>
+
+      <div class="section-label" style="margin-top:4px;">Intake Details</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Years of Experience</label>
+          <input type="text" id="f_yearsExp" placeholder="e.g. 3 years"/>
+        </div>
+        <div class="form-group">
+          <label>Willing to Relocate?</label>
+          <select id="f_relocate">
+            <option value="">— Select —</option>
+            <option>Yes — open to anything</option>
+            <option>Yes — nearby only</option>
+            <option>No</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Hot / Warm / Cold</label>
+          <select id="f_readiness">
+            <option value="">— Select —</option>
+            <option>🔥 Hot — ready to submit</option>
+            <option>⏱ Warm — follow up soon</option>
+            <option>📦 Cold — keep in pool</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Willing to Relocate?</label>
+          <select id="f_relocate">
+            <option value="">— Select —</option>
+            <option>Yes — open to anything</option>
+            <option>Yes — nearby only</option>
+            <option>No</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Previous Employers (last 2–3)</label>
+        <input type="text" id="f_prevEmployers" placeholder="e.g. Amazon FC — 2 yrs, Walmart DC — 1 yr"/>
+      </div>
+      <div class="form-group">
+        <label>Reason for Looking / Leaving</label>
+        <textarea id="f_reasonLooking" placeholder="e.g. Laid off, seeking better pay, relocation…" style="min-height:56px;"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Red Flags / Concerns</label>
+        <textarea id="f_redFlags" placeholder="Gaps in employment, restricted schedule, anything to flag — honest notes only" style="min-height:56px;"></textarea>
+      </div>
+
+      <div class="section-label" style="margin-top:4px;">Skills &amp; Notes</div>
+      <div class="form-group">
+        <label>Skills / Tags <span style="color:var(--gray-400);font-weight:400;text-transform:none;letter-spacing:0">(press Enter or comma to add)</span></label>
+        <div class="tags-input-wrap" id="tagsWrap" onclick="document.getElementById('tagInput').focus()">
+          <input class="tags-input-field" id="tagInput" placeholder="Type a skill and press Enter…" onkeydown="handleTagInput(event)"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Notes</label>
+        <textarea id="f_notes" placeholder="Pre-screen notes, certifications, special requirements…"></textarea>
+      </div>
+
+      <div class="section-label" style="margin-top:4px;">Resume</div>
+      <div class="form-group">
+        <div id="resumeDropZone" class="resume-drop-zone" onclick="document.getElementById('resumeFileInput').click()" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+          <div class="dz-icon">📄</div>
+          <div class="dz-text">Click to upload or drag & drop resume</div>
+          <div class="dz-sub">PDF, DOC, DOCX supported</div>
+        </div>
+        <div id="resumeLoaded" class="resume-loaded" style="display:none;">
+          <span>📄</span>
+          <span class="rl-name" id="resumeFileName"></span>
+          <button class="rl-remove" onclick="removeResume()" title="Remove">✕</button>
+        </div>
+        <input type="file" id="resumeFileInput" accept=".pdf,.doc,.docx" style="display:none" onchange="handleFileSelect(event)"/>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeAddModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveCandidate()">Save Candidate</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE QUICK VIEW MODAL -->
+<div class="overlay" id="profileOverlay">
+  <div class="modal" style="max-width:560px;">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="profileName"></div>
+        <div id="profileSubtitle" style="font-size:0.8rem;color:var(--gray-400);margin-top:2px;"></div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button class="btn btn-sm btn-gold" onclick="editFromProfile()">&#9999;&#65039; Edit</button>
+        <button class="modal-close" onclick="closeProfileModal()">✕</button>
+      </div>
+    </div>
+    <div class="modal-body" id="profileBody" style="padding:20px 28px;"></div>
+  </div>
+</div>
+
+<!-- RESUME PREVIEW MODAL -->
+<div class="overlay" id="previewOverlay">
+  <div class="preview-modal">
+    <div class="preview-header">
+      <div>
+        <div class="preview-name" id="previewName"></div>
+        <div class="preview-sub" id="previewSub"></div>
+      </div>
+      <div class="preview-actions">
+        <button class="btn btn-sm btn-gold" id="downloadBtn" onclick="downloadResume()">⬇ Download</button>
+        <button class="btn btn-sm btn-outline" onclick="closePreview()">✕ Close</button>
+      </div>
+    </div>
+    <div class="preview-body" id="previewBody"></div>
+  </div>
+</div>
+
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxij0dlmpgyIUjHonF0E07SLhAsristgY3m68Se8mJR52G7JpK5BOtig5h8BDPntR8ndQ/exec";
+
+  let candidates = [];
+  let editingId = null;
+  let currentTags = [];
+  let currentResumeData = null;
+  let currentResumeName = null;
+  let currentPreviewData = null;
+  let currentPreviewName = null;
+
+  // ── Loading & Toast ──────────────────────────────────────────────────────
+  function setLoading(on, msg) {
+    document.getElementById('loadingBar').style.display = on ? 'flex' : 'none';
+    if (msg) document.getElementById('loadingMsg').textContent = msg;
+  }
+
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.background = type === 'error' ? 'var(--red)' : 'var(--green)';
+    t.style.display = 'block';
+    t.style.opacity = '1';
+    setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.style.display='none', 400); }, 3200);
+  }
+
+  // ── Industry Other toggle ────────────────────────────────────────────────
+  function toggleOtherIndustry(val) {
+    const otherInput = document.getElementById('f_industryOther');
+    if (!otherInput) return;
+    otherInput.style.display = val === 'Other' ? 'block' : 'none';
+    if (val !== 'Other') otherInput.value = '';
+  }
+
+  function getIndustryValue() {
+    const sel = document.getElementById('f_industry').value;
+    if (sel === 'Other') {
+      const custom = (document.getElementById('f_industryOther').value||'').trim();
+      return custom ? custom : 'Other';
+    }
+    return sel;
+  }
+
+  // ── Google Sheets API calls ──────────────────────────────────────────────
+  async function loadFromSheets() {
+    setLoading(true, 'Loading your candidates from Google Sheets…');
+    try {
+      const res = await fetch(`${SCRIPT_URL}?action=getAll`);
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      candidates = data.candidates || [];
+      updateStats();
+      renderTable();
+    } catch(err) {
+      showToast('Could not connect to Google Sheets. Check your internet.', 'error');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function saveToSheets(candidate) {
+    const res = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'save', candidate }),
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    return data;
+  }
+
+  async function deleteFromSheets(id) {
+    const res = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'delete', id }),
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    return data;
+  }
+
+  // ── Stats & badges ───────────────────────────────────────────────────────
+  function updateStats() {
+    document.getElementById('totalCount').textContent = candidates.length;
+    document.getElementById('availableCount').textContent = candidates.filter(c => c.status === 'Active').length;
+  }
+
+  function badgeClass(status) {
+    const map = { Active:'badge-available', Placed:'badge-placed', Interviewing:'badge-interviewing', Submitted:'badge-submitted', Inactive:'badge-inactive', DNU:'badge-dnu' };
+    return map[status] || 'badge-inactive';
+  }
+
+  // ── Render table ─────────────────────────────────────────────────────────
+  function renderTable() {
+    const search   = document.getElementById('searchInput').value.toLowerCase();
+    const statusF  = document.getElementById('statusFilter').value;
+    const industryF= document.getElementById('industryFilter').value;
+
+    let filtered = candidates.filter(c => {
+      const matchSearch = !search ||
+        `${c.firstName} ${c.lastName}`.toLowerCase().includes(search) ||
+        (c.targetTitles||'').toLowerCase().includes(search) ||
+        (c.location||'').toLowerCase().includes(search) ||
+        (c.industry||'').toLowerCase().includes(search) ||
+        (c.placementType||'').toLowerCase().includes(search) ||
+        (c.availability||'').toLowerCase().includes(search) ||
+        (c.shift||'').toLowerCase().includes(search) ||
+        (c.pay||'').toLowerCase().includes(search) ||
+        (c.notes||'').toLowerCase().includes(search) ||
+        (c.phone||'').toLowerCase().includes(search) ||
+        (c.email||'').toLowerCase().includes(search) ||
+        (c.tags||[]).some(t => t.toLowerCase().includes(search));
+      const matchStatus  = !statusF   || c.status   === statusF;
+      const matchIndustry= !industryF || c.industry === industryF;
+      return matchSearch && matchStatus && matchIndustry;
+    });
+
+    const tbody = document.getElementById('tableBody');
+    const TOTAL  = 250;
+
+    if (filtered.length === 0) {
+      document.getElementById('emptyState').style.display = 'none';
+      const msg = candidates.length === 0
+        ? `<tr><td colspan="17" style="text-align:center;padding:40px;color:var(--gray-400);">
+            <div style="font-size:2rem;margin-bottom:8px;">&#128203;</div>
+            <div style="font-weight:600;color:var(--navy);margin-bottom:6px;">No candidates yet</div>
+            <div style="font-size:0.85rem;">Click + Add Candidate to get started.</div>
+           </td></tr>`
+        : `<tr><td colspan="17" style="text-align:center;padding:32px;color:var(--gray-400);">No candidates match your search or filters.</td></tr>`;
+      const pad = Array.from({length:TOTAL},()=>`<tr style="height:47px;"><td colspan="17"></td></tr>`).join('');
+      tbody.innerHTML = msg + pad;
+      return;
+    }
+
+    document.getElementById('emptyState').style.display = 'none';
+
+    const readinessBadge = (r) => {
+      if (!r) return '<span style="color:var(--gray-400);font-size:0.8rem;">—</span>';
+      if (r.includes('Hot')) return `<span class="badge" style="background:var(--red-bg);color:var(--red);">🔥 Hot</span>`;
+      if (r.includes('Warm')) return `<span class="badge" style="background:var(--orange-bg);color:var(--orange);">⏱ Warm</span>`;
+      return `<span class="badge" style="background:var(--gray-100);color:var(--gray-400);">📦 Cold</span>`;
+    };
+
+    const rows = filtered.map(c => `
+      <tr>
+        <td>
+          <div class="candidate-name">${c.firstName||''} ${c.lastName||''}</div>
+          ${c.email ? `<div style="font-size:0.75rem;color:var(--gray-400);margin-top:2px;">${c.email}</div>` : ''}
+          ${c.phone ? `<div style="font-size:0.75rem;color:var(--gray-400);">${c.phone}</div>` : ''}
+        </td>
+        <td><span class="badge ${badgeClass(c.status)}">${c.status||'—'}</span></td>
+        <td>${readinessBadge(c.readiness)}</td>
+        <td style="font-size:0.83rem;">${c.industry||'—'}</td>
+        <td style="font-size:0.83rem;">${c.targetTitles||'—'}</td>
+        <td style="font-size:0.83rem;">${c.placementType ? `<span class="badge badge-inactive">${c.placementType}</span>` : '—'}</td>
+        <td style="font-size:0.83rem;">${c.location||'—'}</td>
+        <td style="font-size:0.83rem;">${c.availability||'—'}</td>
+        <td style="font-size:0.83rem;">${c.shift||'—'}</td>
+        <td style="font-size:0.83rem;font-weight:600;color:var(--navy);">${c.pay||'—'}</td>
+        <td style="text-align:center;font-size:0.83rem;">${c.splitPartner==='Yes' ? '<span style="color:var(--orange);font-weight:700;">Yes</span>' : '<span style="color:var(--gray-400);">No</span>'}</td>
+        <td style="font-size:0.83rem;white-space:nowrap;">${c.lastTouch||'—'}</td>
+        <td style="text-align:center;">
+          ${c.driveLink
+            ? `<a href="${c.driveLink}" target="_blank" style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;font-size:0.75rem;font-weight:600;color:var(--blue);background:var(--blue-bg);border:1.5px solid var(--blue);text-decoration:none;">&#128193; Folder</a>`
+            : `<span style="color:var(--gray-400);font-size:0.8rem;">—</span>`}
+        </td>
+        <td>
+          <div class="tags">
+            ${(c.tags||[]).slice(0,3).map(t=>`<span class="tag">${t}</span>`).join('')}
+            ${(c.tags||[]).length>3 ? `<span class="tag">+${c.tags.length-3}</span>` : ''}
+          </div>
+        </td>
+        <td><div class="notes-cell" title="${(c.notes||'').replace(/"/g,'&quot;')}">${c.notes||'—'}</div></td>
+        <td>
+          ${c.resumeData
+            ? `<button class="resume-btn has-resume" onclick="openPreview('${c.id}')">&#128196; View</button>`
+            : `<label class="resume-upload-label">&#128206; Upload<input type="file" accept=".pdf,.doc,.docx" style="display:none" onchange="quickUpload(event,'${c.id}')"/></label>`}
+        </td>
+        <td>
+          <div class="actions">
+            <button class="btn btn-sm btn-gold" onclick="openProfileModal('${c.id}')" title="Quick View">&#128065;</button>
+            <button class="btn btn-sm btn-outline" onclick="openEditModal('${c.id}')">&#9999;&#65039;</button>
+            <button class="btn btn-sm btn-outline" style="color:var(--red)" onclick="deleteCandidate('${c.id}')">&#128465;</button>
+          </div>
+        </td>
+      </tr>`).join('');
+
+    const pad = Array.from({length:Math.max(0,TOTAL-filtered.length)},()=>
+      `<tr style="height:47px;"><td colspan="17"></td></tr>`).join('');
+    tbody.innerHTML = rows + pad;
+    updateStats();
+  }
+
+  // ── Tags ─────────────────────────────────────────────────────────────────
+  function handleTagInput(e) {
+    const input = document.getElementById('tagInput');
+    if (e.key==='Enter'||e.key===',') {
+      e.preventDefault();
+      const val = input.value.replace(/,/g,'').trim();
+      if (val && !currentTags.includes(val)) { currentTags.push(val); renderTags(); }
+      input.value = '';
+    } else if (e.key==='Backspace' && input.value==='' && currentTags.length>0) {
+      currentTags.pop(); renderTags();
+    }
+  }
+  function renderTags() {
+    const wrap = document.getElementById('tagsWrap');
+    wrap.querySelectorAll('.tag-item').forEach(el=>el.remove());
+    currentTags.forEach((tag,i)=>{
+      const el = document.createElement('span');
+      el.className='tag-item';
+      el.innerHTML=`${tag}<button onclick="removeTag(${i})" tabindex="-1">✕</button>`;
+      wrap.insertBefore(el,document.getElementById('tagInput'));
+    });
+  }
+  function removeTag(i) { currentTags.splice(i,1); renderTags(); }
+
+  // ── Resume ───────────────────────────────────────────────────────────────
+  function handleFileSelect(e) { const f=e.target.files[0]; if(f) loadResumeFile(f); }
+  function handleDragOver(e) { e.preventDefault(); document.getElementById('resumeDropZone').classList.add('dragover'); }
+  function handleDragLeave() { document.getElementById('resumeDropZone').classList.remove('dragover'); }
+  function handleDrop(e) { e.preventDefault(); document.getElementById('resumeDropZone').classList.remove('dragover'); const f=e.dataTransfer.files[0]; if(f) loadResumeFile(f); }
+  function loadResumeFile(file) {
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      currentResumeData=ev.target.result; currentResumeName=file.name;
+      document.getElementById('resumeDropZone').style.display='none';
+      document.getElementById('resumeLoaded').style.display='flex';
+      document.getElementById('resumeFileName').textContent=file.name;
+    };
+    reader.readAsDataURL(file);
+  }
+  function removeResume() {
+    currentResumeData=null; currentResumeName=null;
+    document.getElementById('resumeDropZone').style.display='block';
+    document.getElementById('resumeLoaded').style.display='none';
+    document.getElementById('resumeFileInput').value='';
+  }
+  function quickUpload(e,id) {
+    const file=e.target.files[0]; if(!file) return;
+    const reader=new FileReader();
+    reader.onload=ev=>{ const c=candidates.find(x=>x.id===id); if(c){c.resumeData=ev.target.result;c.resumeName=file.name;} };
+    reader.readAsDataURL(file);
+  }
+
+  // ── Profile Quick View ───────────────────────────────────────────────────
+  let profileViewId = null;
+
+  function openProfileModal(id) {
+    const c = candidates.find(x => x.id === id);
+    if (!c) return;
+    profileViewId = id;
+    document.getElementById('profileName').textContent = `${c.firstName||''} ${c.lastName||''}`;
+    document.getElementById('profileSubtitle').textContent = [c.targetTitles, c.industry].filter(Boolean).join(' · ') || 'No title set';
+
+    const row = (label, value) => value
+      ? `<div style="display:flex;gap:8px;padding:7px 0;border-bottom:1px solid var(--gray-100);font-size:0.85rem;">
+           <div style="color:var(--gray-400);min-width:140px;flex-shrink:0;">${label}</div>
+           <div style="color:var(--navy);font-weight:500;flex:1;">${value}</div>
+         </div>`
+      : '';
+
+    const readinessColor = c.readiness
+      ? (c.readiness.includes('Hot') ? 'var(--red)' : c.readiness.includes('Warm') ? 'var(--orange)' : 'var(--gray-400)')
+      : '';
+
+    document.getElementById('profileBody').innerHTML = `
+      ${row('Phone', c.phone)}
+      ${row('Email', c.email)}
+      ${row('Location', c.location)}
+      ${c.linkedin ? `<div style="display:flex;gap:8px;padding:7px 0;border-bottom:1px solid var(--gray-100);font-size:0.85rem;"><div style="color:var(--gray-400);min-width:140px;flex-shrink:0;">LinkedIn</div><div><a href="${c.linkedin}" target="_blank" style="color:var(--blue);">View Profile</a></div></div>` : ''}
+      ${row('Status', `<span class="badge ${badgeClass(c.status)}">${c.status||''}</span>`)}
+      ${c.readiness ? `<div style="display:flex;gap:8px;padding:7px 0;border-bottom:1px solid var(--gray-100);font-size:0.85rem;"><div style="color:var(--gray-400);min-width:140px;flex-shrink:0;">Readiness</div><div style="font-weight:600;color:${readinessColor};">${c.readiness}</div></div>` : ''}
+      ${row('Placement Type', c.placementType)}
+      ${row('Availability', c.availability)}
+      ${row('Shift Preference', c.shift)}
+      ${row('Comp Target', c.pay)}
+      ${row('Years of Experience', c.yearsExp)}
+      ${row('Willing to Relocate', c.relocate)}
+      ${row('Previous Employers', c.prevEmployers)}
+      ${row('Reason for Looking', c.reasonLooking)}
+      ${row('Red Flags', c.redFlags ? `<span style="color:var(--red);">${c.redFlags}</span>` : '')}
+      ${row('Split Partner', c.splitPartner)}
+      ${(c.tags||[]).length ? `<div style="display:flex;gap:8px;padding:7px 0;border-bottom:1px solid var(--gray-100);font-size:0.85rem;"><div style="color:var(--gray-400);min-width:140px;flex-shrink:0;">Skills / Tags</div><div class="tags" style="flex:1;">${c.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div></div>` : ''}
+      ${row('Notes', c.notes ? `<span style="white-space:pre-wrap;line-height:1.5;">${c.notes}</span>` : '')}
+      ${c.resumeData ? `<div style="padding:10px 0;"><button class="btn btn-sm btn-gold" onclick="closeProfileModal();openPreview('${c.id}')">&#128196; View Resume</button></div>` : ''}
+    `;
+    document.getElementById('profileOverlay').classList.add('active');
+  }
+
+  function closeProfileModal() {
+    document.getElementById('profileOverlay').classList.remove('active');
+  }
+
+  function editFromProfile() {
+    closeProfileModal();
+    if (profileViewId) openEditModal(profileViewId);
+  }
+  function openPreview(id) {
+    const c=candidates.find(x=>x.id===id); if(!c||!c.resumeData) return;
+    document.getElementById('previewName').textContent=`${c.firstName} ${c.lastName}`;
+    document.getElementById('previewSub').textContent=c.resumeName||'Resume';
+    currentPreviewData=c.resumeData; currentPreviewName=c.resumeName||'resume';
+    const body=document.getElementById('previewBody');
+    if(c.resumeData.startsWith('data:application/pdf')) {
+      body.innerHTML=`<iframe src="${c.resumeData}" title="Resume Preview"></iframe>`;
+    } else {
+      body.innerHTML=`<div class="no-preview"><div class="np-icon">&#128196;</div>
+        <div style="font-weight:600;color:var(--navy)">${c.resumeName}</div>
+        <div style="font-size:0.83rem;">Word docs cannot preview in browser — click Download to open.</div>
+        <button class="btn btn-gold" onclick="downloadResume()">&#11015; Download Resume</button></div>`;
+    }
+    document.getElementById('previewOverlay').classList.add('active');
+  }
+  function closePreview() { document.getElementById('previewOverlay').classList.remove('active'); document.getElementById('previewBody').innerHTML=''; }
+  function downloadResume() { if(!currentPreviewData) return; const a=document.createElement('a'); a.href=currentPreviewData; a.download=currentPreviewName; a.click(); }
+
+  // ── Add / Edit modal ─────────────────────────────────────────────────────
+  function openAddModal() {
+    editingId=null; currentTags=[]; currentResumeData=null; currentResumeName=null;
+    document.getElementById('modalTitle').textContent='Add Candidate';
+    clearForm(); renderTags();
+    document.getElementById('addOverlay').classList.add('active');
+  }
+
+  function openEditModal(id) {
+    const c=candidates.find(x=>x.id===id); if(!c) return;
+    editingId=id; currentTags=[...(c.tags||[])]; currentResumeData=c.resumeData||null; currentResumeName=c.resumeName||null;
+    document.getElementById('modalTitle').textContent='Edit Candidate';
+    document.getElementById('f_firstName').value    = c.firstName||'';
+    document.getElementById('f_lastName').value     = c.lastName||'';
+    document.getElementById('f_email').value        = c.email||'';
+    document.getElementById('f_phone').value        = c.phone||'';
+    document.getElementById('f_location').value     = c.location||'';
+    document.getElementById('f_linkedin').value     = c.linkedin||'';
+    const knownIndustries = ['Light Industrial','Warehouse','Administrative/Office','Healthcare/Medical','Logistics & Distribution','IT/Tech','Finance','Executive','Other',''];
+    if (c.industry && !knownIndustries.includes(c.industry)) {
+      document.getElementById('f_industry').value = 'Other';
+      document.getElementById('f_industryOther').style.display = 'block';
+      document.getElementById('f_industryOther').value = c.industry;
+    } else {
+      document.getElementById('f_industry').value = c.industry||'';
+      document.getElementById('f_industryOther').style.display = 'none';
+    }
+    document.getElementById('f_targetTitles').value = c.targetTitles||'';
+    document.getElementById('f_placementType').value= c.placementType||'';
+    document.getElementById('f_status').value       = c.status||'Active';
+    document.getElementById('f_availability').value = c.availability||'';
+    document.getElementById('f_shift').value        = c.shift||'';
+    document.getElementById('f_pay').value          = c.pay||'';
+    document.getElementById('f_splitPartner').value = c.splitPartner||'No';
+    document.getElementById('f_lastTouch').value    = c.lastTouch||'';
+    document.getElementById('f_resumeInDrive').value= c.resumeInDrive||'No';
+    document.getElementById('f_driveLink').value    = c.driveLink||'';
+    document.getElementById('f_notes').value        = c.notes||'';
+    document.getElementById('f_yearsExp').value      = c.yearsExp||'';
+    document.getElementById('f_relocate').value      = c.relocate||'';
+    document.getElementById('f_readiness').value     = c.readiness||'';
+    document.getElementById('f_prevEmployers').value = c.prevEmployers||'';
+    document.getElementById('f_reasonLooking').value = c.reasonLooking||'';
+    document.getElementById('f_redFlags').value      = c.redFlags||'';
+    renderTags();
+    if(currentResumeData){
+      document.getElementById('resumeDropZone').style.display='none';
+      document.getElementById('resumeLoaded').style.display='flex';
+      document.getElementById('resumeFileName').textContent=currentResumeName;
+    } else {
+      document.getElementById('resumeDropZone').style.display='block';
+      document.getElementById('resumeLoaded').style.display='none';
+    }
+    document.getElementById('addOverlay').classList.add('active');
+  }
+
+  function closeAddModal() { document.getElementById('addOverlay').classList.remove('active'); }
+
+  function clearForm() {
+    ['f_firstName','f_lastName','f_email','f_phone','f_location','f_linkedin',
+     'f_targetTitles','f_pay','f_lastTouch','f_notes','f_driveLink',
+     'f_yearsExp','f_prevEmployers','f_reasonLooking','f_redFlags'].forEach(id=>{
+      document.getElementById(id).value='';
+    });
+    document.getElementById('f_industry').value='';
+    document.getElementById('f_industryOther').style.display='none';
+    document.getElementById('f_industryOther').value='';
+    document.getElementById('f_placementType').value='';
+    document.getElementById('f_status').value='Active'; document.getElementById('f_availability').value='';
+    document.getElementById('f_shift').value=''; document.getElementById('f_splitPartner').value='No';
+    document.getElementById('f_resumeInDrive').value='No';
+    document.getElementById('f_relocate').value='';
+    document.getElementById('f_readiness').value='';
+    document.getElementById('resumeDropZone').style.display='block';
+    document.getElementById('resumeLoaded').style.display='none';
+    document.getElementById('resumeFileInput').value='';
+    document.getElementById('tagInput').value='';
+  }
+
+  async function saveCandidate() {
+    const firstName = document.getElementById('f_firstName').value.trim();
+    const lastName  = document.getElementById('f_lastName').value.trim();
+    if (!firstName||!lastName) { alert('Please enter first and last name.'); return; }
+
+    const data = {
+      firstName, lastName,
+      email:         document.getElementById('f_email').value.trim(),
+      phone:         document.getElementById('f_phone').value.trim(),
+      location:      document.getElementById('f_location').value.trim(),
+      linkedin:      document.getElementById('f_linkedin').value.trim(),
+      industry:      getIndustryValue(),
+      targetTitles:  document.getElementById('f_targetTitles').value.trim(),
+      placementType: document.getElementById('f_placementType').value,
+      status:        document.getElementById('f_status').value,
+      availability:  document.getElementById('f_availability').value,
+      shift:         document.getElementById('f_shift').value,
+      pay:           document.getElementById('f_pay').value.trim(),
+      splitPartner:  document.getElementById('f_splitPartner').value,
+      lastTouch:     document.getElementById('f_lastTouch').value,
+      resumeInDrive: document.getElementById('f_resumeInDrive').value,
+      driveLink:     document.getElementById('f_driveLink').value.trim(),
+      notes:         document.getElementById('f_notes').value.trim(),
+      yearsExp:      document.getElementById('f_yearsExp').value.trim(),
+      relocate:      document.getElementById('f_relocate').value,
+      readiness:     document.getElementById('f_readiness').value,
+      prevEmployers: document.getElementById('f_prevEmployers').value.trim(),
+      reasonLooking: document.getElementById('f_reasonLooking').value.trim(),
+      redFlags:      document.getElementById('f_redFlags').value.trim(),
+      tags:          [...currentTags],
+      resumeData:    currentResumeData,
+      resumeName:    currentResumeName,
+    };
+
+    if (editingId) {
+      data.id = editingId;
+      const idx = candidates.findIndex(c=>c.id===editingId);
+      if (idx>-1) candidates[idx] = {...candidates[idx],...data};
+    } else {
+      data.id = 'c_' + Date.now();
+      data.createdAt = new Date().toISOString();
+      candidates.unshift(data);
+    }
+
+    closeAddModal();
+    renderTable();
+    setLoading(true, 'Saving to Google Sheets…');
+    try {
+      await saveToSheets(data);
+      showToast(editingId ? 'Candidate updated!' : 'Candidate saved to Google Sheets!');
+    } catch(err) {
+      showToast('Save failed — check your connection.', 'error');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function deleteCandidate(id) {
+    if (!confirm('Delete this candidate? This cannot be undone.')) return;
+    candidates = candidates.filter(c=>c.id!==id);
+    renderTable();
+    setLoading(true, 'Deleting from Google Sheets…');
+    try {
+      await deleteFromSheets(id);
+      showToast('Candidate deleted.');
+    } catch(err) {
+      showToast('Delete failed — check your connection.', 'error');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  document.getElementById('profileOverlay').addEventListener('click', function(e){ if(e.target===this) closeProfileModal(); });
+  document.getElementById('addOverlay').addEventListener('click', function(e){ if(e.target===this) closeAddModal(); });
+  document.getElementById('previewOverlay').addEventListener('click', function(e){ if(e.target===this) closePreview(); });
+
+  // ── Boot ─────────────────────────────────────────────────────────────────
+  loadFromSheets();
+</script>
+</body>
+</html>
