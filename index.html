@@ -27,9 +27,9 @@
     --red: #b83232;
     --red-bg: #faeaea;
   }
- 
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
- 
+
   html, body {
     width: 100%;
     min-width: 0;
@@ -39,7 +39,7 @@
     color: var(--navy);
     min-height: 100vh;
   }
- 
+
   /* HEADER */
   header {
     background: var(--navy);
@@ -69,7 +69,7 @@
     font-size: 0.8rem;
     font-weight: 500;
   }
- 
+
   /* TOOLBAR */
   .toolbar {
     background: var(--white);
@@ -125,7 +125,7 @@
   .btn-sm { padding: 5px 12px; font-size: 0.78rem; }
   .btn-outline { background: transparent; border: 1.5px solid var(--gray-200); color: var(--gray-600); }
   .btn-outline:hover { border-color: var(--navy); color: var(--navy); }
- 
+
   /* TABLE */
   .table-wrap {
     padding: 20px 24px;
@@ -158,7 +158,7 @@
   tbody tr:hover { background: var(--gray-100); }
   td { padding: 12px 14px; font-size: 0.85rem; vertical-align: middle; }
   .candidate-name { font-weight: 600; color: var(--navy); }
- 
+
   /* STATUS BADGES */
   .badge {
     display: inline-block;
@@ -174,7 +174,7 @@
   .badge-submitted { background: var(--orange-bg); color: var(--orange); }
   .badge-inactive { background: var(--gray-100); color: var(--gray-400); }
   .badge-dnu { background: var(--red-bg); color: var(--red); }
- 
+
   /* TAGS */
   .tags { display: flex; flex-wrap: wrap; gap: 4px; }
   .tag {
@@ -185,7 +185,7 @@
     font-size: 0.7rem;
     font-weight: 500;
   }
- 
+
   /* RESUME CELL */
   .resume-btn {
     display: inline-flex;
@@ -218,10 +218,10 @@
     transition: all 0.15s;
   }
   .resume-upload-label:hover { border-color: var(--gold); color: var(--gold); }
- 
+
   /* ACTIONS */
   .actions { display: flex; gap: 6px; }
- 
+
   /* MODAL OVERLAY */
   .overlay {
     display: none;
@@ -234,7 +234,7 @@
     backdrop-filter: blur(3px);
   }
   .overlay.active { display: flex; }
- 
+
   /* ADD/EDIT MODAL */
   .modal {
     background: var(--white);
@@ -259,7 +259,7 @@
   .modal-close:hover { background: var(--gray-100); color: var(--navy); }
   .modal-body { padding: 24px 28px; }
   .modal-footer { padding: 16px 28px 24px; display: flex; gap: 10px; justify-content: flex-end; }
- 
+
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
   .form-group { margin-bottom: 16px; }
   .form-group label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
@@ -277,7 +277,7 @@
   }
   .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold); background: var(--white); }
   .form-group textarea { resize: vertical; min-height: 70px; }
- 
+
   /* RESUME UPLOAD IN MODAL */
   .resume-drop-zone {
     border: 2px dashed var(--gray-200);
@@ -296,7 +296,7 @@
   .resume-loaded .rl-name { font-size: 0.85rem; font-weight: 600; color: var(--green); flex: 1; }
   .resume-loaded .rl-remove { background: none; border: none; color: var(--red); cursor: pointer; font-size: 1rem; padding: 2px 6px; border-radius: 4px; }
   .resume-loaded .rl-remove:hover { background: var(--red-bg); }
- 
+
   /* RESUME PREVIEW MODAL */
   .preview-modal {
     background: var(--white);
@@ -325,10 +325,10 @@
   .preview-body .text-preview { padding: 24px; overflow-y: auto; height: 100%; font-size: 0.87rem; line-height: 1.7; color: var(--navy); white-space: pre-wrap; font-family: 'DM Sans', sans-serif; }
   .no-preview { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--gray-400); gap: 12px; }
   .no-preview .np-icon { font-size: 3rem; }
- 
+
   /* NOTES CELL */
   .notes-cell { max-width: 160px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.8rem; color: var(--gray-400); }
- 
+
   /* TAGS INPUT */
   .tags-input-wrap { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px; border: 1.5px solid var(--gray-200); border-radius: 8px; background: var(--gray-100); min-height: 42px; cursor: text; }
   .tags-input-wrap:focus-within { border-color: var(--gold); background: var(--white); }
@@ -336,9 +336,9 @@
   .tag-item button { background: none; border: none; color: var(--gold-light); cursor: pointer; font-size: 0.8rem; padding: 0; line-height: 1; opacity: 0.7; }
   .tag-item button:hover { opacity: 1; }
   .tags-input-field { border: none; outline: none; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; background: transparent; color: var(--navy); flex: 1; min-width: 80px; }
- 
+
   .section-label { font-size: 0.72rem; font-weight: 700; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--gray-200); }
- 
+
   /* RESPONSIVE */
   @media (max-width: 700px) {
     .toolbar { padding: 12px 12px; }
@@ -346,12 +346,12 @@
     header { padding: 14px 12px; }
     .form-row { grid-template-columns: 1fr; }
   }
- 
+
   @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
 </style>
 </head>
 <body>
- 
+
 <header>
   <div>
     <div class="logo">KC <span>Elite</span> Staffing</div>
@@ -362,16 +362,16 @@
     <div class="stat-pill">👥 <span id="totalCount">0</span> Total</div>
   </div>
 </header>
- 
+
 <!-- Loading bar -->
 <div id="loadingBar" style="display:none;position:fixed;top:0;left:0;right:0;z-index:999;background:var(--navy);color:var(--gold-light);padding:10px 20px;font-size:0.85rem;font-weight:600;align-items:center;gap:10px;justify-content:center;">
   <span style="animation:spin 1s linear infinite;display:inline-block;">⟳</span>
   <span id="loadingMsg">Loading…</span>
 </div>
- 
+
 <!-- Toast -->
 <div id="toast" style="display:none;position:fixed;bottom:28px;right:28px;z-index:999;color:white;padding:12px 22px;border-radius:10px;font-size:0.87rem;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,0.2);transition:opacity 0.4s;"></div>
- 
+
 <div class="toolbar">
   <div class="search-wrap">
     <span class="search-icon">🔍</span>
@@ -392,6 +392,7 @@
     <option>Warehouse</option>
     <option>Administrative/Office</option>
     <option>Healthcare/Medical</option>
+    <option>Hospitality</option>
     <option>Logistics & Distribution</option>
     <option>IT/Tech</option>
     <option>Finance</option>
@@ -400,7 +401,7 @@
   </select>
   <button class="btn btn-gold" onclick="openAddModal()">+ Add Candidate</button>
 </div>
- 
+
 <div class="table-wrap">
   <table id="candidateTable">
     <thead>
@@ -427,7 +428,7 @@
     <tbody id="tableBody"></tbody>
   </table>
 </div>
- 
+
 <!-- ADD / EDIT MODAL -->
 <div class="overlay" id="addOverlay">
   <div class="modal">
@@ -449,7 +450,7 @@
         <div class="form-group"><label>Location</label><input type="text" id="f_location" placeholder="City, State"/></div>
         <div class="form-group"><label>LinkedIn URL</label><input type="url" id="f_linkedin" placeholder="https://linkedin.com/in/…"/></div>
       </div>
- 
+
       <div class="section-label" style="margin-top:4px;">Placement Details</div>
       <div class="form-row">
         <div class="form-group">
@@ -458,6 +459,7 @@
             <option value="">— Select —</option>
             <option>Light Industrial</option><option>Warehouse</option>
             <option>Administrative/Office</option><option>Healthcare/Medical</option>
+            <option>Hospitality</option>
             <option>Logistics & Distribution</option><option>IT/Tech</option>
             <option>Finance</option><option>Executive</option><option>Other</option>
           </select>
@@ -520,7 +522,7 @@
         <label>Google Drive Folder Link</label>
         <input type="url" id="f_driveLink" placeholder="Paste Drive folder link here…"/>
       </div>
- 
+
       <div class="section-label" style="margin-top:4px;">Intake Details</div>
       <div class="form-row">
         <div class="form-group"><label>Years of Experience</label><input type="text" id="f_yearsExp" placeholder="e.g. 3 years"/></div>
@@ -554,7 +556,7 @@
         <label>Red Flags / Concerns</label>
         <textarea id="f_redFlags" placeholder="Gaps in employment, restricted schedule, anything to flag" style="min-height:56px;"></textarea>
       </div>
- 
+
       <div class="section-label" style="margin-top:4px;">Skills &amp; Notes</div>
       <div class="form-group">
         <label>Skills / Tags <span style="color:var(--gray-400);font-weight:400;text-transform:none;letter-spacing:0">(press Enter or comma to add)</span></label>
@@ -566,7 +568,7 @@
         <label>Notes</label>
         <textarea id="f_notes" placeholder="Pre-screen notes, certifications, special requirements…"></textarea>
       </div>
- 
+
       <div class="section-label" style="margin-top:4px;">Resume</div>
       <div class="form-group">
         <div id="resumeDropZone" class="resume-drop-zone"
@@ -590,7 +592,7 @@
     </div>
   </div>
 </div>
- 
+
 <!-- PROFILE QUICK VIEW MODAL -->
 <div class="overlay" id="profileOverlay">
   <div class="modal" style="max-width:560px;">
@@ -607,7 +609,7 @@
     <div class="modal-body" id="profileBody" style="padding:20px 28px;"></div>
   </div>
 </div>
- 
+
 <!-- RESUME PREVIEW MODAL -->
 <div class="overlay" id="previewOverlay">
   <div class="preview-modal">
@@ -624,10 +626,10 @@
     <div class="preview-body" id="previewBody"></div>
   </div>
 </div>
- 
+
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxij0dlmpgyIUjHonF0E07SLhAsristgY3m68Se8mJR52G7JpK5BOtig5h8BDPntR8ndQ/exec";
- 
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQptD--FUvcvHX66T8bW4VaZukasQJ2PEXLVMd50FLRkG9_m9HMggK-vkOu-fhpJeUdQ/exec";
+
   let candidates = [];
   let editingId = null;
   let currentTags = [];
@@ -635,12 +637,12 @@
   let currentResumeName = null;
   let currentPreviewData = null;
   let currentPreviewName = null;
- 
+
   function setLoading(on, msg) {
     document.getElementById('loadingBar').style.display = on ? 'flex' : 'none';
     if (msg) document.getElementById('loadingMsg').textContent = msg;
   }
- 
+
   function showToast(msg, type) {
     const t = document.getElementById('toast');
     t.textContent = msg;
@@ -649,14 +651,14 @@
     t.style.opacity = '1';
     setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.style.display='none', 400); }, 3200);
   }
- 
+
   function toggleOtherIndustry(val) {
     const otherInput = document.getElementById('f_industryOther');
     if (!otherInput) return;
     otherInput.style.display = val === 'Other' ? 'block' : 'none';
     if (val !== 'Other') otherInput.value = '';
   }
- 
+
   function getIndustryValue() {
     const sel = document.getElementById('f_industry').value;
     if (sel === 'Other') {
@@ -665,7 +667,7 @@
     }
     return sel;
   }
- 
+
   async function loadFromSheets() {
     setLoading(true, 'Loading your candidates from Google Sheets…');
     try {
@@ -682,7 +684,7 @@
       setLoading(false);
     }
   }
- 
+
   async function saveToSheets(candidate) {
     const res = await fetch(SCRIPT_URL, {
       method: 'POST',
@@ -692,7 +694,7 @@
     if (data.error) throw new Error(data.error);
     return data;
   }
- 
+
   async function deleteFromSheets(id) {
     const res = await fetch(SCRIPT_URL, {
       method: 'POST',
@@ -702,22 +704,22 @@
     if (data.error) throw new Error(data.error);
     return data;
   }
- 
+
   function updateStats() {
     document.getElementById('totalCount').textContent = candidates.length;
     document.getElementById('availableCount').textContent = candidates.filter(c => c.status === 'Active').length;
   }
- 
+
   function badgeClass(status) {
     const map = { Active:'badge-available', Placed:'badge-placed', Interviewing:'badge-interviewing', Submitted:'badge-submitted', Inactive:'badge-inactive', DNU:'badge-dnu' };
     return map[status] || 'badge-inactive';
   }
- 
+
   function renderTable() {
     const search    = document.getElementById('searchInput').value.toLowerCase();
     const statusF   = document.getElementById('statusFilter').value;
     const industryF = document.getElementById('industryFilter').value;
- 
+
     let filtered = candidates.filter(c => {
       const matchSearch = !search ||
         `${c.firstName} ${c.lastName}`.toLowerCase().includes(search) ||
@@ -732,16 +734,16 @@
       const matchIndustry = !industryF || c.industry === industryF;
       return matchSearch && matchStatus && matchIndustry;
     });
- 
+
     const tbody = document.getElementById('tableBody');
- 
+
     const readinessBadge = (r) => {
       if (!r) return '<span style="color:var(--gray-400);font-size:0.8rem;">—</span>';
       if (r.includes('Hot'))  return `<span class="badge" style="background:var(--red-bg);color:var(--red);">🔥 Hot</span>`;
       if (r.includes('Warm')) return `<span class="badge" style="background:var(--orange-bg);color:var(--orange);">⏱ Warm</span>`;
       return `<span class="badge" style="background:var(--gray-100);color:var(--gray-400);">📦 Cold</span>`;
     };
- 
+
     if (filtered.length === 0) {
       tbody.innerHTML = `<tr><td colspan="17" style="text-align:center;padding:40px;color:var(--gray-400);">
         <div style="font-size:2rem;margin-bottom:8px;">📋</div>
@@ -752,7 +754,7 @@
       updateStats();
       return;
     }
- 
+
     tbody.innerHTML = filtered.map(c => `
       <tr>
         <td>
@@ -796,10 +798,10 @@
           </div>
         </td>
       </tr>`).join('');
- 
+
     updateStats();
   }
- 
+
   function handleTagInput(e) {
     const input = document.getElementById('tagInput');
     if (e.key==='Enter'||e.key===',') {
@@ -822,7 +824,7 @@
     });
   }
   function removeTag(i) { currentTags.splice(i,1); renderTags(); }
- 
+
   function handleFileSelect(e) { const f=e.target.files[0]; if(f) loadResumeFile(f); }
   function handleDragOver(e) { e.preventDefault(); document.getElementById('resumeDropZone').classList.add('dragover'); }
   function handleDragLeave() { document.getElementById('resumeDropZone').classList.remove('dragover'); }
@@ -849,7 +851,7 @@
     reader.onload=ev=>{ const c=candidates.find(x=>x.id===id); if(c){c.resumeData=ev.target.result;c.resumeName=file.name; renderTable();} };
     reader.readAsDataURL(file);
   }
- 
+
   let profileViewId = null;
   function openProfileModal(id) {
     const c = candidates.find(x => x.id === id);
@@ -889,7 +891,7 @@
   }
   function closeProfileModal() { document.getElementById('profileOverlay').classList.remove('active'); }
   function editFromProfile() { closeProfileModal(); if (profileViewId) openEditModal(profileViewId); }
- 
+
   function openPreview(id) {
     const c=candidates.find(x=>x.id===id); if(!c||!c.resumeData) return;
     document.getElementById('previewName').textContent=`${c.firstName} ${c.lastName}`;
@@ -908,14 +910,14 @@
   }
   function closePreview() { document.getElementById('previewOverlay').classList.remove('active'); document.getElementById('previewBody').innerHTML=''; }
   function downloadResume() { if(!currentPreviewData) return; const a=document.createElement('a'); a.href=currentPreviewData; a.download=currentPreviewName; a.click(); }
- 
+
   function openAddModal() {
     editingId=null; currentTags=[]; currentResumeData=null; currentResumeName=null;
     document.getElementById('modalTitle').textContent='Add Candidate';
     clearForm(); renderTags();
     document.getElementById('addOverlay').classList.add('active');
   }
- 
+
   function openEditModal(id) {
     const c=candidates.find(x=>x.id===id); if(!c) return;
     editingId=id; currentTags=[...(c.tags||[])]; currentResumeData=c.resumeData||null; currentResumeName=c.resumeName||null;
@@ -926,7 +928,7 @@
     document.getElementById('f_phone').value=c.phone||'';
     document.getElementById('f_location').value=c.location||'';
     document.getElementById('f_linkedin').value=c.linkedin||'';
-    const knownIndustries=['Light Industrial','Warehouse','Administrative/Office','Healthcare/Medical','Logistics & Distribution','IT/Tech','Finance','Executive','Other',''];
+    const knownIndustries=['Light Industrial','Warehouse','Administrative/Office','Healthcare/Medical','Hospitality','Logistics & Distribution','IT/Tech','Finance','Executive','Other',''];
     if(c.industry && !knownIndustries.includes(c.industry)){
       document.getElementById('f_industry').value='Other';
       document.getElementById('f_industryOther').style.display='block';
@@ -963,9 +965,9 @@
     }
     document.getElementById('addOverlay').classList.add('active');
   }
- 
+
   function closeAddModal() { document.getElementById('addOverlay').classList.remove('active'); }
- 
+
   function clearForm() {
     ['f_firstName','f_lastName','f_email','f_phone','f_location','f_linkedin',
      'f_targetTitles','f_pay','f_lastTouch','f_notes','f_driveLink',
@@ -989,7 +991,7 @@
     document.getElementById('resumeFileInput').value='';
     document.getElementById('tagInput').value='';
   }
- 
+
   async function saveCandidate() {
     const firstName=document.getElementById('f_firstName').value.trim();
     const lastName=document.getElementById('f_lastName').value.trim();
@@ -1042,7 +1044,7 @@
       console.error(err);
     } finally { setLoading(false); }
   }
- 
+
   async function deleteCandidate(id) {
     if(!confirm('Delete this candidate? This cannot be undone.')) return;
     candidates=candidates.filter(c=>c.id!==id);
@@ -1055,11 +1057,11 @@
       showToast('Delete failed — check your connection.','error');
     } finally { setLoading(false); }
   }
- 
+
   document.getElementById('profileOverlay').addEventListener('click',function(e){if(e.target===this)closeProfileModal();});
   document.getElementById('addOverlay').addEventListener('click',function(e){if(e.target===this)closeAddModal();});
   document.getElementById('previewOverlay').addEventListener('click',function(e){if(e.target===this)closePreview();});
- 
+
   loadFromSheets();
 </script>
 </body>
