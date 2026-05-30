@@ -557,6 +557,47 @@
         <textarea id="f_redFlags" placeholder="Gaps in employment, restricted schedule, anything to flag" style="min-height:56px;"></textarea>
       </div>
 
+      <div class="section-label" style="margin-top:4px;">Sourcing &amp; Compliance</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Source</label>
+          <select id="f_source" onchange="toggleSourceOther(this.value)">
+            <option value="">— Select —</option>
+            <option>Facebook</option>
+            <option>Nextdoor</option>
+            <option>SC Works</option>
+            <option>Phone Call</option>
+            <option>Referral</option>
+            <option>LinkedIn</option>
+            <option>Other</option>
+          </select>
+          <input type="text" id="f_sourceOther" placeholder="Please specify source…" style="display:none;margin-top:8px;"/>
+        </div>
+        <div class="form-group">
+          <label>Background Check</label>
+          <select id="f_bgCheck" onchange="toggleBgNote(this.value)">
+            <option value="">— Select —</option>
+            <option>Yes</option>
+            <option>No</option>
+            <option>Unknown</option>
+          </select>
+          <textarea id="f_bgNote" placeholder="Brief description of last incident…" style="display:none;margin-top:8px;min-height:56px;width:100%;padding:9px 12px;border:1.5px solid var(--gray-200);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.87rem;color:var(--navy);background:var(--gray-100);outline:none;resize:vertical;"></textarea>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Drug Screening</label>
+          <select id="f_drugScreen" onchange="toggleDrugNote(this.value)">
+            <option value="">— Select —</option>
+            <option>Yes</option>
+            <option>No</option>
+            <option>Unknown</option>
+          </select>
+          <textarea id="f_drugNote" placeholder="Brief description…" style="display:none;margin-top:8px;min-height:56px;width:100%;padding:9px 12px;border:1.5px solid var(--gray-200);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.87rem;color:var(--navy);background:var(--gray-100);outline:none;resize:vertical;"></textarea>
+        </div>
+        <div class="form-group"></div>
+      </div>
+
       <div class="section-label" style="margin-top:4px;">Skills &amp; Notes</div>
       <div class="form-group">
         <label>Skills / Tags <span style="color:var(--gray-400);font-weight:400;text-transform:none;letter-spacing:0">(press Enter or comma to add)</span></label>
@@ -565,8 +606,8 @@
         </div>
       </div>
       <div class="form-group">
-        <label>Notes</label>
-        <textarea id="f_notes" placeholder="Pre-screen notes, certifications, special requirements…"></textarea>
+        <label>Notes <span style="color:var(--gray-400);font-weight:400;text-transform:none;letter-spacing:0">— date-stamp each entry like: 5/30 - note here</span></label>
+        <textarea id="f_notes" placeholder="5/30 - Pre-screen completed. Strong candidate, forklift certified…"></textarea>
       </div>
 
       <div class="section-label" style="margin-top:4px;">Resume</div>
@@ -657,6 +698,27 @@
     if (!otherInput) return;
     otherInput.style.display = val === 'Other' ? 'block' : 'none';
     if (val !== 'Other') otherInput.value = '';
+  }
+
+  function toggleSourceOther(val) {
+    const el = document.getElementById('f_sourceOther');
+    if (!el) return;
+    el.style.display = val === 'Other' ? 'block' : 'none';
+    if (val !== 'Other') el.value = '';
+  }
+
+  function toggleBgNote(val) {
+    const el = document.getElementById('f_bgNote');
+    if (!el) return;
+    el.style.display = val === 'No' ? 'block' : 'none';
+    if (val !== 'No') el.value = '';
+  }
+
+  function toggleDrugNote(val) {
+    const el = document.getElementById('f_drugNote');
+    if (!el) return;
+    el.style.display = val === 'No' ? 'block' : 'none';
+    if (val !== 'No') el.value = '';
   }
 
   function getIndustryValue() {
@@ -882,6 +944,11 @@
       ${row('Previous Employers', c.prevEmployers)}
       ${row('Reason for Looking', c.reasonLooking)}
       ${row('Red Flags', c.redFlags?`<span style="color:var(--red);">${c.redFlags}</span>`:'')}
+      ${row('Source', c.source==='Other' && c.sourceOther ? c.sourceOther : (c.source||''))}
+      ${row('Background Check', c.bgCheck ? `<span style="font-weight:600;color:${c.bgCheck==='Yes'?'var(--green)':c.bgCheck==='No'?'var(--red)':'var(--gray-400)'};">${c.bgCheck}</span>` : '')}
+      ${c.bgCheck==='No' && c.bgNote ? row('BG Incident Notes', `<span style="color:var(--red);white-space:pre-wrap;">${c.bgNote}</span>`) : ''}
+      ${row('Drug Screening', c.drugScreen ? `<span style="font-weight:600;color:${c.drugScreen==='Yes'?'var(--green)':c.drugScreen==='No'?'var(--red)':'var(--gray-400)'};">${c.drugScreen}</span>` : '')}
+      ${c.drugScreen==='No' && c.drugNote ? row('Drug Screen Notes', `<span style="color:var(--red);white-space:pre-wrap;">${c.drugNote}</span>`) : ''}
       ${row('Split Partner', c.splitPartner)}
       ${(c.tags||[]).length?`<div style="display:flex;gap:8px;padding:7px 0;border-bottom:1px solid var(--gray-100);font-size:0.85rem;"><div style="color:var(--gray-400);min-width:140px;flex-shrink:0;">Skills / Tags</div><div class="tags" style="flex:1;">${c.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div></div>`:''}
       ${row('Notes', c.notes?`<span style="white-space:pre-wrap;line-height:1.5;">${c.notes}</span>`:'')}
@@ -954,6 +1021,22 @@
     document.getElementById('f_prevEmployers').value=c.prevEmployers||'';
     document.getElementById('f_reasonLooking').value=c.reasonLooking||'';
     document.getElementById('f_redFlags').value=c.redFlags||'';
+    // Source
+    const sourceKnown=['Facebook','Nextdoor','SC Works','Phone Call','Referral','LinkedIn','Other',''];
+    if(c.source && !sourceKnown.includes(c.source)){
+      document.getElementById('f_source').value='Other';
+      document.getElementById('f_sourceOther').style.display='block';
+      document.getElementById('f_sourceOther').value=c.source;
+    } else {
+      document.getElementById('f_source').value=c.source||'';
+      document.getElementById('f_sourceOther').style.display='none';
+    }
+    document.getElementById('f_bgCheck').value=c.bgCheck||'';
+    document.getElementById('f_bgNote').value=c.bgNote||'';
+    document.getElementById('f_bgNote').style.display=c.bgCheck==='No'?'block':'none';
+    document.getElementById('f_drugScreen').value=c.drugScreen||'';
+    document.getElementById('f_drugNote').value=c.drugNote||'';
+    document.getElementById('f_drugNote').style.display=c.drugScreen==='No'?'block':'none';
     renderTags();
     if(currentResumeData){
       document.getElementById('resumeDropZone').style.display='none';
@@ -986,6 +1069,15 @@
     document.getElementById('f_resumeInDrive').value='No';
     document.getElementById('f_relocate').value='';
     document.getElementById('f_readiness').value='';
+    document.getElementById('f_source').value='';
+    document.getElementById('f_sourceOther').style.display='none';
+    document.getElementById('f_sourceOther').value='';
+    document.getElementById('f_bgCheck').value='';
+    document.getElementById('f_bgNote').style.display='none';
+    document.getElementById('f_bgNote').value='';
+    document.getElementById('f_drugScreen').value='';
+    document.getElementById('f_drugNote').style.display='none';
+    document.getElementById('f_drugNote').value='';
     document.getElementById('resumeDropZone').style.display='block';
     document.getElementById('resumeLoaded').style.display='none';
     document.getElementById('resumeFileInput').value='';
@@ -1020,6 +1112,12 @@
       prevEmployers:document.getElementById('f_prevEmployers').value.trim(),
       reasonLooking:document.getElementById('f_reasonLooking').value.trim(),
       redFlags:document.getElementById('f_redFlags').value.trim(),
+      source:document.getElementById('f_source').value,
+      sourceOther:document.getElementById('f_sourceOther').value.trim(),
+      bgCheck:document.getElementById('f_bgCheck').value,
+      bgNote:document.getElementById('f_bgNote').value.trim(),
+      drugScreen:document.getElementById('f_drugScreen').value,
+      drugNote:document.getElementById('f_drugNote').value.trim(),
       tags:[...currentTags],
       resumeData:currentResumeData,
       resumeName:currentResumeName,
